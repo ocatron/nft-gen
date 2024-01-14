@@ -1,6 +1,7 @@
 import os
 from celery import Celery, Task
 from flask import Flask
+from .compositions import compositions_bp
 
 
 def create_app(test_config=None):
@@ -18,9 +19,7 @@ def create_app(test_config=None):
 
     celery_init_app(app)
 
-    @app.route("/hello")
-    def hello():
-        return "Hello world!"
+    app.register_blueprint(compositions_bp)
 
     return app
 
