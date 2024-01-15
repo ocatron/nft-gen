@@ -31,10 +31,10 @@ def celery_init_app(app: Flask) -> Celery:
                 return self.run(*args, **kwargs)
 
     celery_app = Celery(app.name, task_cls=FlaskTask)
-    celery_config = {
-        "broker_url": app.config["CELERY_BROKER_URL"],
-        "result_backend": app.config["CELERY_RESULT_BACKEND"],
-    }
+    celery_config = dict(
+        broker_url=app.config["CELERY_BROKER_URL"],
+        result_backend=app.config["CELERY_RESULT_BACKEND"],
+    )
     celery_app.config_from_object(celery_config)
     celery_app.set_default()
     app.extensions["celery"] = celery_app
