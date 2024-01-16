@@ -43,7 +43,7 @@ class Composition:
         self.layers = layers
 
     def __repr__(self) -> str:
-        return "<Compositiondt>"
+        return "<Composition>"
 
 
 class CompositionConfig:
@@ -55,4 +55,4 @@ class CompositionConfig:
         self.fixed_compositions = fixed_compositions
 
     def __repr__(self) -> str:
-        return "<CompositionConfi>"
+        return "<CompositionConfig>"
