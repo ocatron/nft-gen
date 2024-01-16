@@ -1,4 +1,4 @@
-from marshmallow import Schema, ValidationError, fields, post_load
+from marshmallow import Schema, ValidationError, fields, post_load, validate
 from models import (
     Avoided,
     ComposedLayer,
@@ -30,7 +30,7 @@ class AvoidedSchema(Schema):
 class TraitSchema(Schema):
     id = NonEmptyString(required=True)
     display_name = fields.Str(required=True)
-    weight = fields.Float()
+    weight = fields.Float(required=True, validate=validate.Range(min=0))
     avoid = fields.List(fields.Nested(AvoidedSchema))
 
     @post_load
@@ -41,7 +41,7 @@ class TraitSchema(Schema):
 class LayerSchema(Schema):
     id = NonEmptyString(required=True)
     display_name = fields.Str(required=True)
-    priority = fields.Integer(required=True)
+    priority = fields.Integer(required=True, validate=validate.Range(min=1))
     traits = fields.List(fields.Nested(TraitSchema))
 
     @post_load
@@ -67,7 +67,7 @@ class CompositionSchema(Schema):
 
 
 class CompositionConfigSchema(Schema):
-    total = fields.Int()
+    total = fields.Int(required=True)
     layers = fields.List(fields.Nested(LayerSchema))
     fixed_compositions = fields.List(fields.Nested(CompositionSchema))
 
