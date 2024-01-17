@@ -50,6 +50,12 @@ class Composition:
             mid += f"{layer.layer_id}:{layer.trait_id};"
         return f"{prefix}{mid}{suffix}"
 
+    def as_string(self) -> str:
+        comp_string = ""
+        for layer in self.layers:
+            comp_string += f"{layer.layer_id}:{layer.trait_id};"
+        return comp_string
+
 
 class CompositionConfig:
     def __init__(
