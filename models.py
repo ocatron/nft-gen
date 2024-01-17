@@ -79,3 +79,9 @@ class CompositionConfig:
     def sort_fixed_comps(self):
         for comp in self.fixed_compositions:
             comp.layers.sort(key=lambda layer: self.get_layer_priority(layer.layer_id))
+
+    def make_sorted_composition(self, layers: list[ComposedLayer]):
+        sorted_layers = sorted(
+            layers, key=lambda layer: self.get_layer_priority(layer.layer_id)
+        )
+        return Composition(sorted_layers)
