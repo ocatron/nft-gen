@@ -62,7 +62,7 @@ class CompositionConfig:
         self, total: int, layers: list[Layer], fixed_compositions: list[Composition]
     ):
         self.total = total
-        self.layers = layers
+        self.layers = sorted(layers, key=lambda layer: layer.priority)
         self.fixed_compositions = fixed_compositions
         self.sort_fixed_comps()
 
