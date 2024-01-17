@@ -45,10 +45,10 @@ class Composition:
     def __repr__(self) -> str:
         prefix = "<Composition ("
         mid = ""
-        sufix = ")>"
+        suffix = ")>"
         for layer in self.layers:
             mid += f"{layer.layer_id}:{layer.trait_id};"
-        return f"{prefix}{mid}{sufix}"
+        return f"{prefix}{mid}{suffix}"
 
 
 class CompositionConfig:
@@ -57,8 +57,8 @@ class CompositionConfig:
     ):
         self.total = total
         self.layers = layers
-        # TODO: Sort fixed composition layers here
         self.fixed_compositions = fixed_compositions
+        self.sort_fixed_comps()
 
     def __repr__(self) -> str:
         return "<CompositionConfig>"
@@ -72,6 +72,4 @@ class CompositionConfig:
 
     def sort_fixed_comps(self):
         for comp in self.fixed_compositions:
-            comp.layers.sort(
-                key=lambda layer: self.get_layer_priority(layer.layer_id)
-            )
+            comp.layers.sort(key=lambda layer: self.get_layer_priority(layer.layer_id))
