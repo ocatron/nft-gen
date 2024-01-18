@@ -1,17 +1,18 @@
 import random
 import copy
 from celery import shared_task
-
 from models import ComposedLayer, Composition, CompositionConfig
 from schemas import CompositionConfigSchema, CompositionSchema
 
 
-@shared_task
-def generate(data):
+@shared_task(bind=True)
+def generate(self, data):
     comp_config: CompositionConfig = CompositionConfigSchema().load(data)  # type: ignore
     comps: list[Composition] = []
     visited: set[str] = set()
     total: int = 0
+    progress: int = 0
+    self.update_state(state="PROGRESS", meta={"progress": 0})
 
     for comp in comp_config.fixed_compositions:
         comps.append(comp)
@@ -59,9 +60,11 @@ def generate(data):
             comps.append(comp)
             visited.add(comp.as_string())
             total += 1
-            print(f"Progress: {total}/{comp_config.total}")
+            new_progress = total * 100 // comp_config.total
+            if new_progress > progress:
+                self.update_state(state="PROGRESS", meta={"progress": new_progress})
+                progress = new_progress
 
     result = dict(compositions=CompositionSchema().dump(comps, many=True))
-    print("Done")
 
     return result
